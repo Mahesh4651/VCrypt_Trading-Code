@@ -27,7 +27,7 @@ jobs:
             cd /home/ubuntu/vcrypt-project
 
             if [ ! -d ".git" ]; then
-              git clone https://github.com/<YOUR_GITHUB_USERNAME>/<YOUR_REPO_NAME>.git .
+              git clone https://github.com/Mahesh4651/VCrypt_Trading-Code.git .
             else
               git pull origin main
             
