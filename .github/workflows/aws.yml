@@ -23,7 +23,5 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
-           cd /home/ubuntu/vcrypt-project
-           git pull origin main
-        
+           mkdir -p /home/ubuntu/vcrypt-project
 
