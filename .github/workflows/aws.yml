@@ -24,4 +24,5 @@ jobs:
           port: 22
           script: |
            mkdir -p /home/ubuntu/vcrypt-project
+           git pull origin main
 
