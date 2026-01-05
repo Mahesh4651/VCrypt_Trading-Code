@@ -19,15 +19,12 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
-          username: ubuntu            # change if not Ubuntu
+          username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
-          timeout: 30s
-          command_timeout: 10m
           script: |
-            if [ ! -d /home/ubuntu/vcrypt-project/.git ]; then
-               git clone https://github.com/Mahesh4651/VCrypt_Trading-Code.git /home/ubuntu/vcrypt-project
-            fi
-            cd /home/ubuntu/vcrypt-project
-            git pull origin main
-            docker-compose up -d --build
+           cd /home/ubuntu/vcrypt-project
+           git pull origin main
+           docker-compose down
+           docker-compose up -d --build
+
