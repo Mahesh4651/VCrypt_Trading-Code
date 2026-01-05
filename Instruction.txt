@@ -1,0 +1,3 @@
+1.Use IntelliJ Or Eclipse for Backend
+2.Make a Database In Postgres Sql with name vcrypt_db (make = postgres and Password = root)
+3.Use VS Code for frontend  open the frontend code in vscode and 1st Use (npm i) to install library  the use (npm run dev) to run project 
