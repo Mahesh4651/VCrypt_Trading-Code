@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15
+    container_name: vcrypto-db
+    environment:
+      POSTGRES_DB: vcrypt_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - vcrypto-network
+    restart: unless-stopped
+
+  backend:
+    build: ./Backend
+    container_name: vcrypto-backend
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/vcrypt_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      - db
+    networks:
+      - vcrypto-network
+    restart: unless-stopped
+
+  frontend:
+    build: ./Frontend
+    container_name: vcrypto-frontend
+    ports:
+      - "80:80"
+    environment:
+      - VITE_API_URL=http://backend:8081
+    depends_on:
+      - backend
+    networks:
+      - vcrypto-network
+    restart: unless-stopped
+
+networks:
+  vcrypto-network:
+    driver: bridge
+
+volumes:
+  pgdata:
