@@ -21,14 +21,28 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
-            set -e
-            mkdir -p /home/ubuntu/vcrypt-project
-            cd /home/ubuntu/vcrypt-project
+           set -e
 
-            if [ ! -d ".git" ]; then
-              git clone https://github.com/Mahesh4651/VCrypt_Trading-Code.git
-            else
-              git pull origin main
-            fi
+           APP_DIR=/home/ubuntu/vcrypt-project
+           REPO_URL=https://github.com/Mahesh4651/VCrypt_Trading-Code.git
+
+           mkdir -p $APP_DIR
+           cd $APP_DIR
+
+           if [ -d ".git" ]; then
+             echo "Git repo exists → pulling latest code"
+             git pull origin main
+           else
+            echo "No git repo found"
+
+           if [ "$(ls -A .)" ]; then
+            echo "Directory not empty → cleaning"
+            rm -rf ./*
+            rm -rf ./.??*
+           fi
+
+           echo "Cloning repository"
+           git clone $REPO_URL .
+         fi
 
          
