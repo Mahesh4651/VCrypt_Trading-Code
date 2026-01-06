@@ -1,4 +1,4 @@
-name: Deploy vcrypto trading
+name: Deploy VCrypto to EC2
 
 on:
   push:
@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
@@ -19,28 +19,12 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
-          port: 22
           script: |
-            set -e
-
-            APP_DIR=/home/ubuntu/vcrypt-project
-            REPO_URL=https://github.com/Mahesh4651/VCrypt_Trading-Code.git
-
-            mkdir -p "$APP_DIR"
-            cd "$APP_DIR"
-
-            if [ -d ".git" ]; then
-              echo "Git repo exists → pulling latest code"
-              git pull origin main
-            else
-              echo "No git repo found"
-
-              if [ "$(ls -A .)" ]; then
-                echo "Directory not empty → cleaning"
-                rm -rf ./*
-                rm -rf ./.??*
-              fi
-
-              echo "Cloning repository"
-              git clone "$REPO_URL" .
+            cd /home/ubuntu
+            if [ ! -d "vcrypt-project" ]; then
+              git clone https://github.com/${{ github.repository }} vcrypt-project
             fi
+            cd vcrypt-project
+            git pull origin main
+            docker-compose down
+            docker-compose up -d --build
