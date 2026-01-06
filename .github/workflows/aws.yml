@@ -10,11 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout the repo
       - name: Checkout
         uses: actions/checkout@v3
 
-      # 2️⃣ Deploy to EC2 via SSH
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -23,6 +21,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
+            set -e
             mkdir -p /home/ubuntu/vcrypt-project
             cd /home/ubuntu/vcrypt-project
 
@@ -31,3 +30,6 @@ jobs:
             else
               git pull origin main
             fi
+
+            docker-compose down || true
+            docker-compose up -d --build
